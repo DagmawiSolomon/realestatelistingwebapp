@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<h2>Create an Account</h2>
+<form method="post">
+    {% csrf_token %}
+    {{form.error}}
+    {{form.as_p}}
+    <button type="submit" class="text-gray-900">Create an Account</button>
+    <button type="submit" class="text-gray-900">Create an Account with Google</button>
+
+    <p class="text-gray-900">Have an account?<a href="{% url 'login' %}" class="text-blue-500">Login</a></p>
+</form>
+{% endblock %}

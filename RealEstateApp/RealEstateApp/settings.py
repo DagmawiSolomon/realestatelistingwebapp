@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-        'accounts',
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +51,8 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIREC_URL = "index"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
