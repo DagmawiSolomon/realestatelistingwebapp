@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.gis.db import models as geomodel
 from django.contrib.gis.geos import Point
+from accounts.models import Agent
+from accounts.models import CustomUser
 
 
 
@@ -21,7 +23,15 @@ status_choices = (
     ("sold", "sold"),
 )
 
+
+class Amenities(models.Model):
+    title = models.CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.title;
+
 class Property(models.Model):
+    title = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state_province = models.CharField(max_length=255, verbose_name="state/province")
@@ -34,8 +44,28 @@ class Property(models.Model):
     description = models.TextField()
     price = models.FloatField(default=0)
     status = models.CharField(choices=status_choices)
+    image = models.ImageField(blank=True, null=True)
     location = geomodel.PointField(geography=True, default=Point(0.0,0.0))
 
     def __str__(self) -> str:
-        return f"{self.property_type} in {self.address}"
+        return f"{self.title} in {self.address}"
     
+class Listing(models.Model):
+    property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    list_date = models.DateTimeField(auto_now_add=True)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
+    open_house = models.DateTimeField(blank=True, null=True)
+    #Virtual tool_url to be generated
+
+    def __str__(self) -> str:
+        return f"{self.property} by {self.agent}"
+
+
+#Create own app    
+# class Rating(models.Model):
+#     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+#     rating = models.IntegerField(default=0)
+
+
+
