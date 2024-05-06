@@ -27,6 +27,8 @@ status_choices = (
 class Amenities(models.Model):
     title = models.CharField(max_length=100)
 
+    class Meta:
+        verbose_name_plural = "Amenities"
     def __str__(self) -> str:
         return self.title;
 
@@ -46,6 +48,9 @@ class Property(models.Model):
     status = models.CharField(choices=status_choices)
     image = models.ImageField(blank=True, null=True)
     location = geomodel.PointField(geography=True, default=Point(0.0,0.0))
+
+    class Meta:
+        verbose_name_plural = "Properties"
 
     def __str__(self) -> str:
         return f"{self.title} in {self.address}"

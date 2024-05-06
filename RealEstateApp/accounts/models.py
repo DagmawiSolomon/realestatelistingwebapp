@@ -19,6 +19,8 @@ class Agent(AbstractUser):
     groups = models.ManyToManyField(Group, related_name='agent_set')  
     user_permissions = models.ManyToManyField(Permission, related_name='agent_set')
 
+    class Meta:
+        verbose_name = "Agent"
     def __str__(self) -> str:
         return f"Agent - {self.first_name} {self.last_name}"
 
