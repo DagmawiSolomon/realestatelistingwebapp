@@ -13,4 +13,4 @@ class CustomUserAdmin(UserAdmin):
     list_display = ["phonenumber","email","username",]
     
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Agent)
+admin.site.register(Agent, )

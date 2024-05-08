@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'compressor',
     'django.contrib.gis',
+    'mapwidgets',
 
     'app',
 
@@ -148,3 +149,18 @@ COMPRESS_ROOT = BASE_DIR / 'app/static'
 COMPRESS_ENABLED = True
 
 STATICFILES_FINDERS = ('compressor.finders.CompressorFinder','django.contrib.staticfiles.finders.AppDirectoriesFinder')
+
+MAP_WIDGETS = {
+    "MapboxPointFieldWidget": {
+        "access_token": env("MAPBOX_ACCESS_TOKEN"),
+        "markerFitZoom": 12,
+        "mapOptions": {
+            "animate": True,
+            "zoom": 10,
+            "center": (9.0192, 38.7525)
+        },
+        "geocoderOptions": {
+            "zoom": 7
+        }
+    }
+}

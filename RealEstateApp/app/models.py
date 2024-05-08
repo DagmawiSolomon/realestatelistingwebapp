@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.gis.db import models as geomodel
+from django.contrib.gis.db import models as gismodel
 from django.contrib.gis.geos import Point
 from accounts.models import Agent
 from accounts.models import CustomUser
@@ -47,7 +47,7 @@ class Property(models.Model):
     price = models.FloatField(default=0)
     status = models.CharField(choices=status_choices)
     image = models.ImageField(blank=True, null=True)
-    location = geomodel.PointField(geography=True, default=Point(0.0,0.0))
+    location = gismodel.PointField(geography=True, default=Point(9.005401, 38.763611))
 
     class Meta:
         verbose_name_plural = "Properties"
