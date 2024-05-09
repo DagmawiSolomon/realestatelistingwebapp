@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.gis.db import models as gismodel
 from django.contrib.gis.geos import Point
 from accounts.models import Agent
-from accounts.models import CustomUser
 
 
 
