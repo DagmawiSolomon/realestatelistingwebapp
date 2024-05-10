@@ -46,6 +46,7 @@ class Property(models.Model):
     price = models.FloatField(default=0)
     status = models.CharField(choices=status_choices)
     image = models.ImageField(blank=True, null=True)
+    amenities = models.ManyToManyField(Amenities)
     location = gismodel.PointField(geography=True, default=Point(9.005401, 38.763611))
 
     class Meta:
