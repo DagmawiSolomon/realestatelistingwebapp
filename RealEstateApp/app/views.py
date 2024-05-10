@@ -1,4 +1,9 @@
+from typing import Any
 from django.shortcuts import render
+from .models import Listing
+from django.views.generic import ListView
 
-def index(request):
-    return render(request, 'app/index.html')
+
+class Home(ListView):
+    model = Listing
+    template_name = "app/home.html"
