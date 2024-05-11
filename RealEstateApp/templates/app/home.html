@@ -1,64 +1,16 @@
 {% extends "_base.html" %}
 
 {% block content %}
-{% if user.is_authenticated %}
-<nav>
-<h1 class="text-xl text-green-800">Hello, {{user.username}}</h1>
-<form action ="{% url 'logout' %}" method="POST">
-    {% csrf_token%}
-    <button type="submit">Logout</button>
-</form>
-{% else %}
-<a href="{% url 'login' %}">Login</a>
-<span>|</span>
-<a href="{% url 'signup' %}">Signup</a>
-{% endif %}
-</nav>
 <main>
+    {% include 'app/hero.html' %}
     <section>
-        <h1 class="text-xl">Featured Properties</h1>
-        <div class="grid grid-cols-3 gap-5">
-            {% for item in object_list %}      
-                <div class="max-w-fit bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <a href="#">
-                        <img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
-                    </a>
-                    <div class="p-5">
-                        <a href="#">
-                            <div class="flex items-center gap-3">
-                                <i class='bx bxs-map' ></i>
-                                <p>{{item.property.address}}</p>
-                            </div>
-                        </a>
-                        <div >
-                            <div class="flex">
-                                <div class="flex items-center gap-3">
-                                    <i class='bx bxs-bed' ></i>
-                                    <p>{{item.property.bedrooms}}</p>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <i class='bx bxs-bed' ></i>
-                                    <p>{{item.property.bathrooms}}</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="flex">
-                                    <i class='bx bxs-area' ></i>
-                                    <p>{{item.property.square_footage}}</p>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <i class='bx bxs-home' ></i>
-                                    <p>{{item.property.property_type}}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center">
-                            <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">View Details</button>
-                            <p class="font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">ETB {{item.property.price}}</p>
-                        </div>
-                    </div>
-                </div>
-
+        <div class="flex justify-between items-center my-10">
+            <h1 class="text-2xl font-bold ">Featured Properties</h1>
+            <a href="" class="flex gap-1 items-center hover:underline">Explore more <i class='bx bx-right-arrow-alt'></i></a>
+        </div>
+        <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5">
+            {% for item in object_list|slice:"6" %}      
+               {% include 'app/card.html' %}
             {% endfor %}
         </div>
     </section>

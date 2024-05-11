@@ -1,0 +1,39 @@
+<div class="max-w-fit bg-white border border-stone-200 rounded-lg shadow dark:bg-stone-800 dark:border-stone-700">
+    <a href="#">
+        <img class="rounded-t-lg" src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
+    </a>
+    <div class="p-5">
+        <a href="#">
+            <div class="flex items-center gap-3 py-1">
+                <i class='bx bxs-map' ></i>
+                <p>{{item.property.address}}</p>
+            </div>
+        </a>
+        <div> 
+            <div class="lg:flex py-1 gap-3">
+                <div class="flex items-center gap-1">
+                    <i class='bx bxs-bed' ></i>
+                    <p>{{item.property.bedrooms}}</p>
+                </div>
+                <div class="flex items-center gap-1">
+                    <i class='bx bxs-bath' ></i>
+                    <p>{{item.property.bathrooms}}</p>
+                </div>
+        </div>
+            <div class="py-2">
+                <div class="flex py-1 items-center gap-3">
+                    <i class='bx bxs-area' ></i>
+                    <p class="flex">{{item.property.square_footage|floatformat}} sqm</p>
+                </div>
+                <div class="flex py-1 items-center gap-3">
+                    <i class='bx bxs-home' ></i>
+                    <p>{{item.property.property_type}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center my-4">
+            <button type="button" class="text-white bg-stone-800 hover:bg-stone-900 focus:outline-none focus:ring-4 focus:ring-stone-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-stone-800 dark:hover:bg-stone-700 dark:focus:ring-stone-700 dark:border-stone-700">View Details</button>
+            <p class="font-bold rounded-lg text-md px-5 py-2.5 me-2 mb-2">ETB {{item.property.price|floatformat}}</p>
+        </div>
+    </div>
+</div>

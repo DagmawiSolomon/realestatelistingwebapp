@@ -10,7 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Estate Listing App</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 
     {% compress css %}
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
@@ -18,11 +20,14 @@
 
 </head>
 
-<body class="bg-green-50">
-    <div class="container mx-auto mt-4">
+<header>
+     {% include 'navbar.html' %}
+</header>
+<body>
+    <main class="container mx-auto mt-4 p-4">
         {% block content %}
         {% endblock content %}
-    </div>
+    </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 

@@ -1,0 +1,14 @@
+{% extends '_base.html' %}
+
+
+{% block content %}
+<h1 class="text-2xl font-bold ">Find Property</h1>
+{% include 'app/filter.html' %}
+<div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5">
+    {% for item in object_list %}      
+       {% include 'app/card.html' %}
+    {% endfor %}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends '_base.html' %}
+
+
+{% block content %}
+
+<section>
+    <h1 class="text-2xl font-bold ">Some Nearby Good Agents</h1>
+
+    <form class="flex items-center max-w-full mx-auto mt-4">   
+      
+        <div class="relative w-full">
+            <input type="text" id="voice-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-stone-500 focus:border-stone-500 block w-full ps-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-stone-500 dark:focus:border-stone-500" placeholder="Enter your address" required />
+        </div>
+        <button type="submit" class="inline-flex items-center py-2.5 px-3 ms-2 text-sm font-medium text-white bg-stone-700 rounded-lg border border-stone-700 hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
+            <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>Search
+        </button>
+    </form>
+
+    <div class="flex justify-end w-full py-4">
+
+<form class="flex justify-end max-w-xs">
+    <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-3/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      <option selected>Sort by</option>
+      <option value="US">United States</option>
+      <option value="CA">Canada</option>
+      <option value="FR">France</option>
+      <option value="DE">Germany</option>
+    </select>
+  </form>
+  
+    </div>
+
+</section>
+<section>
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-3 justify-center">
+        {% for item in object_list %}      
+          <div class="max-w-xs bg-white border p-2 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <a href="#">
+                <img class="rounded-t-lg " src="https://github.com/ozgrozer/100k-faces/blob/master/docs/0/8/008002.jpg?raw=true" alt="" />
+            </a>
+            <p class="my-2">{{item.first_name}} {{item.last_name}}</p>
+            <div class="flex gap-3 items-center">
+                <div class="flex gap-1">
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star' ></i>
+                    <i class='bx bxs-star' ></i>
+                    <i class='bx bxs-star-half' ></i>
+                </div>
+                <p>4.5 reviews</p>
+           </div>
+           <button type="button" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-12 py-2.5 text-center me-2 my-4 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">View Profile</button>
+        </div>
+
+        {% endfor %}
+    </div>
+
+
+
+
+    
+</section>
+{% endblock %}
+
