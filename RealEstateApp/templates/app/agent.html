@@ -9,7 +9,7 @@
     <form class="flex items-center max-w-full mx-auto mt-4">   
       
         <div class="relative w-full">
-            <input type="text" id="voice-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-stone-500 focus:border-stone-500 block w-full ps-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-stone-500 dark:focus:border-stone-500" placeholder="Enter your address" required />
+            <input type="text" id="search_here" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-stone-500 focus:border-stone-500 block w-full ps-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-stone-500 dark:focus:border-stone-500" placeholder="Enter your address" required />
         </div>
         <button type="submit" class="inline-flex items-center py-2.5 px-3 ms-2 text-sm font-medium text-white bg-stone-700 rounded-lg border border-stone-700 hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
             <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -34,7 +34,7 @@
 
 </section>
 <section>
-    <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-3 justify-center">
+    <div id="box" class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-3 justify-center">
         {% for item in object_list %}      
           <div class="max-w-xs bg-white border p-2 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <a href="#">
@@ -53,7 +53,6 @@
            </div>
            <button type="button" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-12 py-2.5 text-center me-2 my-4 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">View Profile</button>
         </div>
-
         {% endfor %}
     </div>
 
@@ -64,3 +63,42 @@
 </section>
 {% endblock %}
 
+{% block scripts %}
+<script>
+    const data = '{{qs_json}}'
+    const rdata = JSON.parse(data.replace(/&quot;/g,'"'))
+    console.log(rdata)
+    const input = document.getElementById('search_here')
+    const box = document.getElementById('box')
+    console.log(box)
+    let filteredArr = []
+    input.addEventListener('keyup',(e)=>{
+        box.innerHTML = ""
+        filteredArr = rdata.filter(agents=>((agents['first_name'] + agents['last_name']).toLowerCase()).includes((e.target.value).toLowerCase()))
+        if (filteredArr.length > 0){
+            filteredArr.map(item=>{
+                box.innerHTML += `<div class="max-w-xs bg-white border p-2 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <a href="#">
+                <img class="rounded-t-lg " src="https://github.com/ozgrozer/100k-faces/blob/master/docs/0/8/008002.jpg?raw=true" alt="" />
+            </a>
+            <p class="my-2">${item.first_name} ${item.last_name}</p>
+            <div class="flex gap-3 items-center">
+                <div class="flex gap-1">
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star' ></i>
+                    <i class='bx bxs-star' ></i>
+                    <i class='bx bxs-star-half' ></i>
+                </div>
+                <p>4.5 reviews</p>
+           </div>
+           <button type="button" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-12 py-2.5 text-center me-2 my-4 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">View Profile</button>
+        </div>`
+            })
+        }
+        else{
+            box.innerHTML += `<b>No results found</b>`
+        }
+    })
+</script>
+{% endblock %}
