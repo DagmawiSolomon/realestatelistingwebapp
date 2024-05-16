@@ -6,7 +6,7 @@
     <section>
         <div class="flex justify-between items-center my-10">
             <h1 class="text-2xl font-bold ">Featured Properties</h1>
-            <a href="" class="flex gap-1 items-center hover:underline">Explore more <i class='bx bx-right-arrow-alt'></i></a>
+            <a href="{% url 'listing' %}" class="flex gap-1 items-center hover:underline">Explore more <i class='bx bx-right-arrow-alt'></i></a>
         </div>
         <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5">
             {% for item in object_list|slice:"6" %}      

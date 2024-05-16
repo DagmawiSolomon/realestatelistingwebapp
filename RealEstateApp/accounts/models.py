@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from phonenumber_field.modelfields import PhoneNumberField
-
+from django.core.validators import MaxValueValidator, MinValueValidator 
 
 
 class CustomUser(AbstractUser):
@@ -24,3 +24,22 @@ class Agent(AbstractUser):
     def __str__(self) -> str:
         return f"Agent - {self.first_name} {self.last_name}"
 
+class AgentRating(models.Model):
+    agent = models.ForeignKey(Agent,on_delete=models.CASCADE)
+    rating = models.IntegerField(default=0)
+    rating_count = models.IntegerField(default=0)
+    average_rating = models.IntegerField(default=0.0)
+
+
+    def calculate_rating(self):
+        return self.rating/self.rating_count
+    
+    def save(self, *args, **kwargs):
+        if not self.average_rating:
+            self.average_rating = self.calculate_rating()
+        super().save(*args, **kwargs)
+    
+    def __str__(self) -> str:
+        return f"{self.agent.first_name} {self.agent.last_name} - {self.average_rating} rating"
+    
+    

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from.models import (Agent)
+from.models import (Agent, AgentRating)
 # Register your models here.
 
 from .forms import CustomUserChangeForm, CustomUserCreationForm
@@ -13,4 +13,5 @@ class CustomUserAdmin(UserAdmin):
     list_display = ["phonenumber","email","username",]
     
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Agent, )
+admin.site.register(Agent)
+admin.site.register(AgentRating)

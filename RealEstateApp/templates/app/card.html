@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="flex items-center my-4">
-            <button type="button" class="text-white bg-stone-800 hover:bg-stone-900 focus:outline-none focus:ring-4 focus:ring-stone-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-stone-800 dark:hover:bg-stone-700 dark:focus:ring-stone-700 dark:border-stone-700">View Details</button>
+            <a href="{% url 'listing-detail' item.id %}" class="text-white bg-stone-800 hover:bg-stone-900 focus:outline-none focus:ring-4 focus:ring-stone-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-stone-800 dark:hover:bg-stone-700 dark:focus:ring-stone-700 dark:border-stone-700">View Details</a>
             <p class="font-bold rounded-lg text-md px-5 py-2.5 me-2 mb-2">ETB {{item.property.price|floatformat}}</p>
         </div>
     </div>

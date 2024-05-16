@@ -1,18 +1,23 @@
 from typing import Any
 from django.shortcuts import render
 from .models import Listing, Agent
-from django.views.generic import ListView
+from django.views.generic import ListView,DetailView
 from django.core.serializers.json import DjangoJSONEncoder
 import json
-import datetime
+
 class Home(ListView):
     model = Listing
     template_name = "app/home.html"
 
 
-class Listing(ListView):
+class ListingsView(ListView):
     model = Listing
     template_name = "app/listing.html"
+
+class ListingDetailView(DetailView):
+    model = Listing
+    template_name = "app/listing-detail.html"
+
 
 class Agents(ListView):
     model = Agent
