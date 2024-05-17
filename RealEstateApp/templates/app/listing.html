@@ -4,7 +4,7 @@
 {% block content %}
 <h1 class="text-2xl font-bold ">Find Property</h1>
 {% include 'app/filter.html' %}
-<div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5">
+<div id = "lisiting-container" class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5">
     {% for item in object_list %}      
        {% include 'app/card.html' %}
     {% endfor %}
@@ -15,7 +15,59 @@
 <script>
     const data = '{{qs_json}}'
     const rdata = JSON.parse(data.replace(/&quot;/g,'"'))
-    filterdProperty = rdata.filter(property => property['address'])
-    console.log(filterdProperty)
+    const addressInput = document.getElementById("address-search")
+    let lisitingContainer = document.getElementById("lisiting-container")
+    let filterdProperty = []
+    addressInput.addEventListener("keyup", (e) => {
+        lisitingContainer.innerHTML=" "
+        filterdProperty = rdata.filter(property => ((property['address']).toLowerCase()).includes((e.target.value).toLowerCase()))
+        if (filterdProperty.length > 0){
+            filterdProperty.map(property => {
+                let id = property.id
+                lisitingContainer.innerHTML += `
+                <div id = "card" class="max-w-fit bg-white border border-stone-200 rounded-lg shadow dark:bg-stone-800 dark:border-stone-700">
+    <a href="#">
+        <img class="rounded-t-lg" src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
+    </a>
+    <div class="p-5">
+        <a href="#">
+            <div class="flex items-center gap-3 py-1">
+                <i class='bx bxs-map' ></i>
+                <p>${property.address}</p>
+            </div>
+        </a>
+        <div> 
+            <div class="lg:flex py-1 gap-3">
+                <div class="flex items-center gap-1">
+                    <i class='bx bxs-bed' ></i>
+                    <p>${property.bedrooms}</p>
+                </div>
+                <div class="flex items-center gap-1">
+                    <i class='bx bxs-bath' ></i>
+                    <p>${property.bathrooms}</p>
+                </div>
+        </div>
+            <div class="py-2">
+                <div class="flex py-1 items-center gap-3">
+                    <i class='bx bxs-area' ></i>
+                    <p class="flex">${Math.floor(property.sqm)} sqm</p>
+                </div>
+                <div class="flex py-1 items-center gap-3">
+                    <i class='bx bxs-home' ></i>
+                    <p>${property.property_type}</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center my-4">
+            <a href="/listing/${id}/" class="text-white bg-stone-800 hover:bg-stone-900 focus:outline-none focus:ring-4 focus:ring-stone-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-stone-800 dark:hover:bg-stone-700 dark:focus:ring-stone-700 dark:border-stone-700">View Details</a>
+            <p class="font-bold rounded-lg text-md px-5 py-2.5 me-2 mb-2">ETB ${Math.floor(property.price)}</p>
+        </div>
+    </div>
+</div>
+                `
+            })
+        }
+    })
+
 </script>
 {% endblock %}

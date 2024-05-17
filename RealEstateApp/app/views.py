@@ -22,13 +22,14 @@ class ListingsView(ListView):
         for listing in Listing.objects.all():
             property = listing.property
             property_values =  {
-                "id": property.id,
+                "id": listing.id,
                 "title": property.title,
                 "address": property.address,
                 "bedrooms": property.bedrooms,
                 "bathrooms": property.bathrooms,
                 "sqm":property.square_footage,
                 "price":property.price,
+                "property_type":property.property_type,
             }
             listings.append(property_values)
         context["qs_json"] = json.dumps(listings, cls=DjangoJSONEncoder)
