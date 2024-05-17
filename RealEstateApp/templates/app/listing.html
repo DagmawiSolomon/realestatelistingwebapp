@@ -9,6 +9,13 @@
        {% include 'app/card.html' %}
     {% endfor %}
 </div>
+{% endblock %}
 
-
+{% block scripts %}
+<script>
+    const data = '{{qs_json}}'
+    const rdata = JSON.parse(data.replace(/&quot;/g,'"'))
+    filterdProperty = rdata.filter(property => property['address'])
+    console.log(filterdProperty)
+</script>
 {% endblock %}

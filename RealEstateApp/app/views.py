@@ -5,6 +5,8 @@ from django.views.generic import ListView,DetailView
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
+
+
 class Home(ListView):
     model = Listing
     template_name = "app/home.html"
@@ -13,6 +15,24 @@ class Home(ListView):
 class ListingsView(ListView):
     model = Listing
     template_name = "app/listing.html"
+
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+        listings = []
+        for listing in Listing.objects.all():
+            property = listing.property
+            property_values =  {
+                "id": property.id,
+                "title": property.title,
+                "address": property.address,
+                "bedrooms": property.bedrooms,
+                "bathrooms": property.bathrooms,
+                "sqm":property.square_footage,
+                "price":property.price,
+            }
+            listings.append(property_values)
+        context["qs_json"] = json.dumps(listings, cls=DjangoJSONEncoder)
+        return context
 
 class ListingDetailView(DetailView):
     model = Listing
