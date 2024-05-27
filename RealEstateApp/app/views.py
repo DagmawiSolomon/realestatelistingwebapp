@@ -13,8 +13,10 @@ class Home(ListView):
 
 
 class ListingsView(ListView):
+    paginate_by = 9
     model = Listing
     template_name = "app/listing.html"
+
 
     def get_context_data(self, **kwargs: Any):
         context = super().get_context_data(**kwargs)
@@ -30,6 +32,10 @@ class ListingsView(ListView):
                 "sqm":property.square_footage,
                 "price":property.price,
                 "property_type":property.property_type,
+                    'location': {
+                'lat': property.location.y, 
+                'lng': property.location.x,
+            }
             }
             listings.append(property_values)
         context["qs_json"] = json.dumps(listings, cls=DjangoJSONEncoder)
