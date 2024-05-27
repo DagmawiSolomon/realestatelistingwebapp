@@ -47,6 +47,7 @@ class ListingDetailView(DetailView):
 
 
 class Agents(ListView):
+    paginate_by = 9
     model = Agent
     template_name = "app/agent.html"
 
