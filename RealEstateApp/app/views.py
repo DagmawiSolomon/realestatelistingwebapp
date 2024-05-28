@@ -56,3 +56,7 @@ class Agents(ListView):
         agents = list(Agent.objects.values('id','first_name','last_name','profile'))
         context["qs_json"] = json.dumps(agents, cls=DjangoJSONEncoder)
         return context
+    
+class AgentsDetailView(DetailView):
+    model = Agent
+    template_name = "app/agent-detail.html"
