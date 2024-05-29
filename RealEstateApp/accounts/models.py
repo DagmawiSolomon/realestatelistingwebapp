@@ -28,11 +28,13 @@ class AgentRating(models.Model):
     agent = models.ForeignKey(Agent,on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
     rating_count = models.IntegerField(default=0)
-    average_rating = models.IntegerField(default=0.0)
+    average_rating = models.FloatField(default=0.0)
 
 
     def calculate_rating(self):
-        return self.rating/self.rating_count
+        if self.rating_count > 0:
+            return self.rating / self.rating_count
+        return 0.0
     
     def save(self, *args, **kwargs):
         if not self.average_rating:

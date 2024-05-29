@@ -90,8 +90,6 @@
             })
         }
     })
-
-    
     rdata.map((property)=>{
         console.log(property.location.lng,property.location.lat)
         var marker = L.marker([property.location.lat, property.location.lng], { icon: customIcon }).addTo(map);

@@ -3,6 +3,8 @@
 
 {% block content %}
 
+{% load custom_filters %}
+
 <section>
     <h1 class="text-2xl font-bold ">Some Nearby Agents</h1>
 
@@ -25,14 +27,57 @@
             </a>
             <p class="my-2">{{item.first_name}} {{item.last_name}}</p>
             <div class="flex gap-3 items-center">
+                {% for rating in item.agentrating_set.all %}
                 <div class="flex gap-1">
-                    <i class='bx bxs-star'></i>
-                    <i class='bx bxs-star'></i>
-                    <i class='bx bxs-star' ></i>
-                    <i class='bx bxs-star' ></i>
-                    <i class='bx bxs-star-half' ></i>
+                    {% with number=rating.average_rating %}
+    
+
+                    {% with number|split_decimal as parts %}
+
+                       {% with parts|make_range as star %} 
+                            {% if star.2%}
+                                {% for i in star.0 %} 
+                                    <i class='bx bxs-star' ></i>
+                                {% endfor %} 
+                                <i class='bx bxs-star-half' ></i>
+                                {% for i in star.1 %} 
+                                    <i class='bx bx-star' ></i>
+                                {% endfor %} 
+                            {% else %}
+                                {% for i in star.0 %} 
+                                    <i class='bx bxs-star' ></i>
+                                {% endfor %} 
+                                {% for i in star.1 %} 
+                                <i class='bx bx-star' ></i>
+                                {% endfor %} 
+                            {% endif %}
+                        {%endwith%}
+                     
+                       
+
+                       {% comment %} {% if parts.1 != 0 %} 
+                       <i class='bx bxs-star-half' ></i>
+                       {% endif %}
+
+            
+                        {% for i in parts.0|empty_stars %} 
+                        <i class='bx bx-star' ></i>
+                        {% endfor %} {% endcomment %}
+                   
+                    {% endwith %}
+                {% endwith %}
                 </div>
-                <p>{{item.calculate_rating}}</p>
+                <p>{{rating.average_rating}} reviews</p>
+                {% empty %}
+                <div class="flex gap-1">
+                    <i class='bx bx-star' ></i>
+                    <i class='bx bx-star' ></i>
+                    <i class='bx bx-star' ></i>
+                    <i class='bx bx-star' ></i>
+                    <i class='bx bx-star' ></i>
+                </div>
+                <p>0 reviews</p>
+                {% endfor %}
            </div>
            <div class="my-6">
             <a href="{% url 'agent-detail' item.id %}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-12 py-2.5 text-center me-2 my-4 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">View Profile</a>
@@ -55,7 +100,6 @@
     const rdata = JSON.parse(data.replace(/&quot;/g,'"'))
     const input = document.getElementById('search_here')
     const box = document.getElementById('box')
-    console.log(box)
     let filteredArr = []
     input.addEventListener('keyup',(e)=>{
         box.innerHTML = ""
@@ -75,7 +119,7 @@
                     <i class='bx bxs-star' ></i>
                     <i class='bx bxs-star-half' ></i>
                 </div>
-                <p>4.5 reviews</p>
+                <p>${item.average_rating} reviews</p>
            </div>
            <div class="my-6">
             <a href="/agent/${item.id}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-12 py-2.5 text-center me-2 my-4 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">View Profile</a>
