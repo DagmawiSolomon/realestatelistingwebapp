@@ -15,8 +15,6 @@
         </div>
 
     </form>
-
-
 </section>
 <section class="mt-12">
     <div id="box" class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-3 justify-center">
@@ -52,18 +50,6 @@
                                 {% endfor %} 
                             {% endif %}
                         {%endwith%}
-                     
-                       
-
-                       {% comment %} {% if parts.1 != 0 %} 
-                       <i class='bx bxs-star-half' ></i>
-                       {% endif %}
-
-            
-                        {% for i in parts.0|empty_stars %} 
-                        <i class='bx bx-star' ></i>
-                        {% endfor %} {% endcomment %}
-                   
                     {% endwith %}
                 {% endwith %}
                 </div>
@@ -82,8 +68,6 @@
            <div class="my-6">
             <a href="{% url 'agent-detail' item.id %}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-12 py-2.5 text-center me-2 my-4 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">View Profile</a>
            </div>
-           
-          
         </div>
         {% endfor %}
     </div>
@@ -100,6 +84,7 @@
     const rdata = JSON.parse(data.replace(/&quot;/g,'"'))
     const input = document.getElementById('search_here')
     const box = document.getElementById('box')
+
     let filteredArr = []
     input.addEventListener('keyup',(e)=>{
         box.innerHTML = ""

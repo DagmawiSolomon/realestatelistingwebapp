@@ -1,5 +1,5 @@
 {% extends '_base.html' %}
-
+{% load static %}
 
 {% block content %}
 <h1 class="text-2xl font-bold ">Find Property</h1>
@@ -23,109 +23,183 @@
     var map = L.map('map').setView([38.9072, -95.7129], 8);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         id: 'mapbox/streets-v12', 
-        accessToken: 'pk.eyJ1IjoiZGFnbWF3aXNvbG9tb24xMjM1OCIsImEiOiJjbHZ4eTF5NnkyYXRjMmpueXA2OW1maDlqIn0.g7nfiANVb18wXCpXS-9AWw', // Provide the Mapbox access token
+        accessToken: 'pk.eyJ1IjoiZGFnbWF3aXNvbG9tb24xMjM1OCIsImEiOiJjbHZ4eTF5NnkyYXRjMmpueXA2OW1maDlqIn0.g7nfiANVb18wXCpXS-9AWw',
         tileSize: 512,
         zoomOffset: -1
     }).addTo(map);
-    var customIcon = L.icon({
-            iconUrl: "/static/img/marker.svg", 
-            iconSize: [38, 38], 
-            iconAnchor: [19, 38], 
-            popupAnchor: [0, -38] 
-        });
     
+    var customIcon = L.icon({
+        iconUrl: "/static/img/marker.svg",
+        iconSize: [38, 38],
+        iconAnchor: [19, 38],
+        popupAnchor: [0, -38]
+    });
 
-    const data = '{{qs_json}}'
-    const rdata = JSON.parse(data.replace(/&quot;/g,'"'))
-    const addressInput = document.getElementById("address-search")
-    let lisitingContainer = document.getElementById("lisiting-container")
-    let filterdProperty = []
-    addressInput.addEventListener("keyup", (e) => {
-        lisitingContainer.innerHTML=" "
-        filterdProperty = rdata.filter(property => ((property['address']).toLowerCase()).includes((e.target.value).toLowerCase()))
-        if (filterdProperty.length > 0){
-            filterdProperty.map(property => {
-                let id = property.id
+    var filters = {};
+    const data = '{{qs_json}}';
+    const rdata = JSON.parse(data.replace(/&quot;/g, '"'));
+    const addressInput = document.getElementById("address-search");
+    let lisitingContainer = document.getElementById("lisiting-container");
+
+    function getOption(element) {
+        const id = element.id;
+        const typeDropdown = document.getElementById(id);
+        filters[id] = typeDropdown.options[typeDropdown.selectedIndex].text;
+        filterData();
+    }
+
+    function getPrice() {
+        filters["min"] = document.getElementById("min").value;
+        filters["max"] = document.getElementById("max").value;
+        filterData();
+    }
+
+    function getAddress(element) {
+        const addressInput = document.getElementById("address-search").value;
+        filters['address'] = addressInput;
+        filterData();
+    }
+
+    let filteredProperty = [];
+
+    function filterData() {
+        console.log(filters)
+        let address = filters.hasOwnProperty("address") ? filters["address"].toLowerCase() : "";
+        let min = filters.hasOwnProperty("min") ? Number(filters["min"]) : 0;
+        let max = filters.hasOwnProperty("max") ? Number(filters["max"]) : Infinity;
+        let type = filters.hasOwnProperty("propertyType") ? filters["propertyType"] : "";
+        let bathrooms = filters.hasOwnProperty("bathrooms") ? filters["bathrooms"] : "";
+        let bedrooms = filters.hasOwnProperty("bedrooms") ? filters["bedrooms"] : "";
+
+
+        filteredProperty = rdata.filter(
+            property => (
+                (address === "" || property['address'].toLowerCase().includes(address)) &&
+                (bathrooms === "" || property['bathrooms'] == bathrooms) &&
+                (bedrooms === "" || property['bedrooms'] == bedrooms) &&
+                (type === "" || property.property_type === type) &&
+                (property['price'] >= min && property['price'] <= max)
+            )
+        );
+        displayFilters();
+       
+        lisitingContainer.innerHTML = "";
+        
+
+        if (filteredProperty.length > 0) {
+            filteredProperty.forEach(property => {
+                let id = property.id;
                 lisitingContainer.innerHTML += `
-                <div id = "card" class="max-w-fit bg-white border border-stone-200 rounded-lg shadow dark:bg-stone-900 dark:border-stone-700">
-    <a href="#">
-        <img class="rounded-t-lg" src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-    </a>
-    <div class="p-5">
-        <a href="#">
-            <div class="flex items-center gap-3 py-1">
-                <i class='bx bxs-map' ></i>
-                <p>${property.address}</p>
-            </div>
-        </a>
-        <div> 
-            <div class="lg:flex py-1 gap-3">
-                <div class="flex items-center gap-1">
-                    <i class='bx bxs-bed' ></i>
-                    <p>${property.bedrooms}</p>
-                </div>
-                <div class="flex items-center gap-1">
-                    <i class='bx bxs-bath' ></i>
-                    <p>${property.bathrooms}</p>
-                </div>
-        </div>
-            <div class="py-2">
-                <div class="flex py-1 items-center gap-3">
-                    <i class='bx bxs-area' ></i>
-                    <p class="flex">${Math.floor(property.sqm)} sqm</p>
-                </div>
-                <div class="flex py-1 items-center gap-3">
-                    <i class='bx bxs-home' ></i>
-                    <p>${property.property_type}</p>
-                </div>
-            </div>
-        </div>
-        <div class="flex items-center my-4">
-            <a href="/listing/${id}/" class="text-white bg-stone-900 hover:bg-stone-900 focus:outline-none focus:ring-4 focus:ring-stone-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-stone-900 dark:hover:bg-stone-700 dark:focus:ring-stone-700 dark:border-stone-700">View Details</a>
-            <p class="font-bold rounded-lg text-md px-5 py-2.5 me-2 mb-2">ETB ${Math.floor(property.price)}</p>
-        </div>
-    </div>
-</div>
-                `
-            })
+                    <div id="card" class="max-w-fit bg-white border border-stone-200 rounded-lg shadow dark:bg-stone-900 dark:border-stone-700">
+                        <a href="#">
+                            <img class="rounded-t-lg" src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
+                        </a>
+                        <div class="p-5">
+                            <a href="#">
+                                <div class="flex items-center gap-3 py-1">
+                                    <i class='bx bxs-map'></i>
+                                    <p>${property.address}</p>
+                                </div>
+                            </a>
+                            <div class="lg:flex py-1 gap-3">
+                                <div class="flex items-center gap-1">
+                                    <i class='bx bxs-bed'></i>
+                                    <p>${property.bedrooms}</p>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class='bx bxs-bath'></i>
+                                    <p>${property.bathrooms}</p>
+                                </div>
+                            </div>
+                            <div class="py-2">
+                                <div class="flex py-1 items-center gap-3">
+                                    <i class='bx bxs-area'></i>
+                                    <p class="flex">${Math.floor(property.sqm)} sqm</p>
+                                </div>
+                                <div class="flex py-1 items-center gap-3">
+                                    <i class='bx bxs-home'></i>
+                                    <p>${property.property_type}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center my-4">
+                                <a href="/listing/${id}/" class="text-white bg-stone-900 hover:bg-stone-900 focus:outline-none focus:ring-4 focus:ring-stone-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-stone-900 dark:hover:bg-stone-700 dark:focus:ring-stone-700 dark:border-stone-700">View Details</a>
+                                <p class="font-bold rounded-lg text-md px-5 py-2.5 me-2 mb-2">ETB ${Math.floor(property.price)}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
         }
-    })
-    rdata.map((property)=>{
-        console.log(property.location.lng,property.location.lat)
+
+    }
+   
+    filterData();
+
+    rdata.forEach(property => {
         var marker = L.marker([property.location.lat, property.location.lng], { icon: customIcon }).addTo(map);
         var popupContent = `
-    <div>
-        <div class="flex items-center gap-1 min-w-64">
-            <i class='text-md  bx bxs-map' ></i>
-            <p class="text-md font-bold">${property.address}</p>
-        </div>
-        <div class="grid grid-cols-2">
-            <div class="flex items-center gap-1">
-                <i class='bx bxs-bed' ></i>
-                <p class="text-md">${property.bedrooms} Bedrooms</p>
-            </div>
-            <div class="flex items-center gap-1">
-                <i class='bx bxs-bath' ></i>
-                <p class="text-md">${property.bathrooms} Bathroom</p>
-            </div>
-            <div class="flex items-center gap-1">
-                <i class='bx bxs-area' ></i>
-                <p class="text-md">${Math.floor(property.sqm)} sqm</p>
-            </div>
-            <div class="flex py-1 items-center gap-3">
-                <i class='bx bxs-home' ></i>
-                <p class="text-md">${property.property_type}</p>
-            </div>
             <div>
-                <p class="text-xs font-bold">ETB ${property.price}</p>
+                <div class="flex items-center gap-1 min-w-64">
+                    <i class='text-md  bx bxs-map'></i>
+                    <p class="text-md font-bold">${property.address}</p>
+                </div>
+                <div class="grid grid-cols-2">
+                    <div class="flex items-center gap-1">
+                        <i class='bx bxs-bed'></i>
+                        <p class="text-md">${property.bedrooms} Bedrooms</p>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <i class='bx bxs-bath'></i>
+                        <p class="text-md">${property.bathrooms} Bathroom</p>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <i class='bx bxs-area'></i>
+                        <p class="text-md">${Math.floor(property.sqm)} sqm</p>
+                    </div>
+                    <div class="flex py-1 items-center gap-3">
+                        <i class='bx bxs-home'></i>
+                        <p class="text-md">${property.property_type}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold">ETB ${property.price}</p>
+                    </div>
+                </div>
             </div>
-        <div>
-    </div>
-            `    
-            
+        `;
 
-    marker.bindPopup(popupContent)
-    })
+        marker.bindPopup(popupContent);
+    });
+
+    function capitalize(string) {
+        if (!string) return string; 
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
+    
+    function displayFilters(){
+            let container = document.getElementById("filter-container");
+            container.innerHTML = ""
+        Object.entries(filters).forEach(([key, value]) => {
+            let container = document.getElementById("filter-container");
+           
+            container.innerHTML += `
+                <span id="badge-dismiss-dark" class="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-gray-800 bg-gray-100 rounded dark:bg-gray-700 dark:text-gray-300">
+                   ${capitalize(key)} ${value} <!-- Displaying key and value of the filter -->
+                    <button type="button" class="inline-flex items-center p-1 ms-2 text-sm text-gray-400 bg-transparent rounded-sm hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-gray-300" data-dismiss-target="#badge-dismiss-dark" aria-label="Remove">
+                        <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Remove badge</span>
+                    </button>
+                </span>
+            `;
+        });
+
+    }
+
+
     
 </script>
+
+
 {% endblock %}
