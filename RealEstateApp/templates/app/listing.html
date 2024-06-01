@@ -44,7 +44,12 @@
     function getOption(element) {
         const id = element.id;
         const typeDropdown = document.getElementById(id);
-        filters[id] = typeDropdown.options[typeDropdown.selectedIndex].text;
+        const selectedText = typeDropdown.options[typeDropdown.selectedIndex].text;
+        const invalidOptions = ["Year", "Type", "Bed", "Bath"];
+        
+        if (!invalidOptions.includes(selectedText)) {
+            filters[id] = selectedText;
+        }
         filterData();
     }
 
@@ -70,13 +75,13 @@
         let type = filters.hasOwnProperty("propertyType") ? filters["propertyType"] : "";
         let bathrooms = filters.hasOwnProperty("bathrooms") ? filters["bathrooms"] : "";
         let bedrooms = filters.hasOwnProperty("bedrooms") ? filters["bedrooms"] : "";
-
+        console.log(type)
 
         filteredProperty = rdata.filter(
             property => (
                 (address === "" || property['address'].toLowerCase().includes(address)) &&
                 (bathrooms === "" || property['bathrooms'] == bathrooms) &&
-                (bedrooms === "" || property['bedrooms'] == bedrooms) &&
+                (bedrooms === "" ||property['bedrooms'] == bedrooms) &&
                 (type === "" || property.property_type === type) &&
                 (property['price'] >= min && property['price'] <= max)
             )
@@ -181,7 +186,7 @@
             container.innerHTML = ""
         Object.entries(filters).forEach(([key, value]) => {
             let container = document.getElementById("filter-container");
-           
+        
             container.innerHTML += `
                 <span id="badge-dismiss-dark" class="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-gray-800 bg-gray-100 rounded dark:bg-gray-700 dark:text-gray-300">
                    ${capitalize(key)} ${value} <!-- Displaying key and value of the filter -->
@@ -192,7 +197,7 @@
                         <span class="sr-only">Remove badge</span>
                     </button>
                 </span>
-            `;
+            `
         });
 
     }
