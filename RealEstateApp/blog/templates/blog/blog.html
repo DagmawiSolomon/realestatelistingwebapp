@@ -1,0 +1,8 @@
+{% extends '_base.html' %}
+
+{% block content %}
+{% for blog in object_list %}
+{% empty %}
+<p>No Blog Post</p>
+{% endfor%}
+{% endblock %}
