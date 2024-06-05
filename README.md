@@ -1,41 +1,3 @@
-# Realestate listing webapp
-
-### Overview
-
-This project is a web application for listing and browsing real estate properties. It is built using Django for the backend, Tailwind CSS for styling, and Flowbite for UI components.
-
-### Features
-
-User authentication (registration, login, logout)
-CRUD functionality for real estate listings
-Search and filter listings by various criteria
-Responsive design for mobile and desktop views
-Modern UI components using Flowbite
-
-Certainly! Below is a sample README for a real estate listing web application built with Django, Tailwind CSS, and Flowbite.
-
----
-
-# Real Estate Listing Web Application
-
-## Overview
-
-This project is a web application for listing and browsing real estate properties. It is built using Django for the backend, Tailwind CSS for styling, and Flowbite for UI components.
-
-## Features
-
-- User authentication (registration, login, logout)
-- CRUD functionality for real estate listings
-- Display locations on a map
-- Search and filter listings by various criteria
-- Modern UI components using Flowbite
-
-## Instalation
-
-Certainly! Below is the updated README with the fixed third feature and a slight improvement to the formatting.
-
----
-
 # Real Estate Listing Web Application
 
 ## Overview
@@ -54,8 +16,7 @@ This project is a web application for listing and browsing real estate propertie
 
 - **Backend**: Django
 - **Frontend**: Tailwind CSS, Flowbite
-- **Database**: SQLite (default for Django, can be configured for PostgreSQL, MySQL, etc.)
-- **Deployment**: [Your deployment method, e.g., Heroku, Docker, etc.]
+- **Database**: Postgresql
 
 ## Installation
 
@@ -64,6 +25,7 @@ This project is a web application for listing and browsing real estate propertie
 - Python 3.x
 - Node.js and npm (for Tailwind CSS)
 - Git
+- PostgreSQL
 
 ### Steps
 
@@ -89,21 +51,40 @@ This project is a web application for listing and browsing real estate propertie
    npm install
    ```
 
-5. **Apply database migrations:**
+5. **Set up PostgreSQL database:**
+   - Create a new PostgreSQL database and user:
+     ```sql
+     CREATE DATABASE your_database_name;
+     CREATE USER your_database_user WITH PASSWORD 'your_database_password';
+     ```
+   - Update the `DATABASES` setting in `realestate/settings.py` with your PostgreSQL credentials:
+     ```python
+     DATABASES = {
+         'default': {
+             'ENGINE': 'django.db.backends.postgresql',
+             'NAME': 'your_database_name',
+             'USER': 'your_database_user',
+             'PASSWORD': 'your_database_password',
+             'HOST': 'localhost',  # or the address of your database server
+             'PORT': '5432',
+         }
+     }
+     ```
+
+6. **Apply database migrations:**
    ```bash
    python manage.py migrate
    ```
 
-6. **Run the development server:**
+7. **Run the development server:**
    ```bash
    python manage.py runserver
    ```
 
-7. **Compile Tailwind CSS:**
+8. **Compile Tailwind CSS:**
    ```bash
    npx tailwindcss -i app/static/src/input.css -o app/static/src/output.css --watch
    ```
-
 
 ## Usage
 
